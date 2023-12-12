@@ -1,31 +1,36 @@
 {
   "name": "score_tracker",
-  "version": "1.0.0",
-  "main": "index.js",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
-    "compile": "tsc",
-    "start": "npm run compile && node ./dist/index.js",
-    "prisma:client": "prisma generate"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/demakoff/score_tracker.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/demakoff/score_tracker/issues"
-  },
-  "homepage": "https://github.com/demakoff/score_tracker#readme",
-  "keywords": [],
-  "description": "",
-  "devDependencies": {
-    "@types/node": "^20.10.4",
-    "prisma": "^5.7.0",
-    "ts-node": "^10.8.0",
-    "typescript": "^5.3.3"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
   "dependencies": {
-    "@prisma/client": "^5.7.0"
+    "@nextui-org/react": "^2.2.9",
+    "@prisma/client": "^5.7.0",
+    "framer-motion": "^10.16.16",
+    "next": "14.0.4",
+    "react": "^18",
+    "react-dom": "^18"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "autoprefixer": "^10.0.1",
+    "eslint": "^8",
+    "eslint-config-next": "14.0.4",
+    "postcss": "^8",
+    "prisma": "^5.7.0",
+    "tailwindcss": "^3.3.0",
+    "typescript": "^5"
+  },
+  "prisma": {
+    "generate-client": "prisma generate",
+    "add-migration": "prisma migrate dev",
+    "run-migration": "prisma migrate deploy"
   }
 }
