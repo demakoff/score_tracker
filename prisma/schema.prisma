@@ -13,6 +13,6 @@ model Games {
   createdAt    DateTime @default(now()) @db.Timestamptz(0)
   teamOneName  String   @db.VarChar(20)
   teamTwoName  String   @db.VarChar(20)
-  scoreTeamOne Int      @default(0) @db.SmallInt
-  scoreTeamTwo Int      @default(0) @db.SmallInt
+  teamOneScore Int      @default(0) @db.SmallInt
+  teamTwoScore Int      @default(0) @db.SmallInt
 }

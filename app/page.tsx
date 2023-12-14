@@ -1,11 +1,9 @@
-import { Button } from '@nextui-org/button';
+import ActiveGame from '@components/ActiveGame';
 
 export default function Home() {
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <p className='w-full justify-center'>
-        <Button>Click me</Button>
-      </p>
-    </main>
-  )
-}
+    return (
+        <section className='w-full'>
+            <ActiveGame />
+        </section>
+    );
+} 

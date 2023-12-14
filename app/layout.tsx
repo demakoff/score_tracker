@@ -1,26 +1,34 @@
+import React from 'react';
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { Teko } from 'next/font/google';
 import '@styles/globals.css';
-import { Providers } from "./providers";
+import { Providers } from './providers';
 
-const inter = Inter({ subsets: ['latin'] })
+const font = Teko({ subsets: ['latin'], weight: '300' });
 
 export const metadata: Metadata = {
-  title: 'Table Football score tracker'
-}
+    title: 'Table Football score tracker'
+};
 
 export default function RootLayout({
-  children,
+    children,
 }: {
-  children: React.ReactNode
+    children: React.ReactNode
 }) {
-  return (
-    <html lang="en" className='dark'>
-      <body className={inter.className}>
-        <Providers>
-          {children}
-        </Providers>
-      </body>
-    </html>
-  )
+    const headerClasses = 'bg-gradient-to-r from-primary to-danger bg-clip-text text-transparent text-center text-4xl py-4';
+    return (
+        <html lang="en" className='dark'>
+            <head><link rel="icon" href="/favicon.ico" sizes="any" /></head>
+            <body className={font.className}>
+                <Providers>
+                    <main className="flex flex-col p-4 py-8">
+                        <h1 className={headerClasses}>
+                            Brand new Kicker score tracker
+                        </h1>
+                        {children}
+                    </main>
+                </Providers>
+            </body>
+        </html >
+    );
 }
