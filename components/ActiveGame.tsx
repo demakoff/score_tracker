@@ -22,15 +22,37 @@ const StartNewGame = ({ text }: { text: string }) => {
     );
 };
 
+const fetchGame = async () => {
+    return fetch('api/graphql', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            query: `{
+                activeGame {
+                  id,
+                  createdAt,
+                  teamOneName,
+                  teamTwoName,
+                  teamOneScore,
+                  teamTwoScore,
+                  winner
+                }
+              }`
+        })
+    });
+};
+
 export default function ActiveGame() {
     const [gameData, setGameData] = useState<Game | null>();
     const [isLoading, setIsLoading] = useState<boolean>(true);
 
     const fetchActiveGame = async () => {
         try {
-            const response = await fetch('/api/active-game');
-            const data = await response.json();
-            setGameData(data);
+            const response = await fetchGame();
+            const { data } = await response.json();
+            setGameData(data?.activeGame || null);
         } catch (error) {
             console.error(error);
             setGameData(null);
@@ -83,9 +105,10 @@ export default function ActiveGame() {
                     <div className={`flex-col ${isLoading ? 'hidden' : ''}`}>
                         {gameData ?
                             (<>
-                                <div className="py-4 text-5xl">
-                                    {gameData.teamOneName} <span className="text-xl">vs</span>{' '}
-                                    {gameData.teamTwoName}
+                                <div className="flex flex-row items-center py-4 text-5xl">
+                                    <div className="flex-auto w-4">{gameData.teamOneName}</div>
+                                    <div className="flex-none text-xl px-1">vs</div>
+                                    <div className="flex-auto w-4">{gameData.teamTwoName}</div>
                                 </div>
                                 <div className="py-4 text-9xl">
                                     {gameData.teamOneScore} : {gameData.teamTwoScore}
@@ -95,9 +118,9 @@ export default function ActiveGame() {
                                     <div className="py-4 text-4xl">
                                         <p>
                                             {' '}
-                                            Woohoo! <b>{gameData.winner}</b> won this game!
+                                            &quot;{gameData.winner}&quot; is a winner!
                                         </p>
-                                        <StartNewGame text="One more?" />
+                                        <StartNewGame text="One more time?" />
                                     </div>
                                 ) : (
                                     <div className="flex space-x-4 py-4">
