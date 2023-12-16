@@ -4,6 +4,8 @@ import { Button, Spinner } from '@nextui-org/react';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import confetti from 'canvas-confetti';
+import { gql, useQuery } from '@apollo/client';
+
 import { Game } from '@utils/types';
 
 const StartNewGame = ({ text }: { text: string }) => {
@@ -22,48 +24,47 @@ const StartNewGame = ({ text }: { text: string }) => {
     );
 };
 
-const fetchGame = async () => {
-    return fetch('api/graphql', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            query: `{
-                activeGame {
-                  id,
-                  createdAt,
-                  teamOneName,
-                  teamTwoName,
-                  teamOneScore,
-                  teamTwoScore,
-                  winner
-                }
-              }`
-        })
-    });
-};
+const ActiveGameQuery = gql`
+    {
+        activeGame {
+            id,
+            createdAt,
+            teamOneName,
+            teamTwoName,
+            teamOneScore,
+            teamTwoScore,
+            winner
+        }
+    }    
+`;
+//     return fetch('api/graphql', {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json'
+//         },
+//         body: JSON.stringify({
+//             query: `{
+//                 activeGame {
+//                   id,
+//                   createdAt,
+//                   teamOneName,
+//                   teamTwoName,
+//                   teamOneScore,
+//                   teamTwoScore,
+//                   winner
+//                 }
+//               }`
+//         })
+//     });
+// };
 
 export default function ActiveGame() {
-    const [gameData, setGameData] = useState<Game | null>();
-    const [isLoading, setIsLoading] = useState<boolean>(true);
 
-    const fetchActiveGame = async () => {
-        try {
-            const response = await fetchGame();
-            const { data } = await response.json();
-            setGameData(data?.activeGame || null);
-        } catch (error) {
-            console.error(error);
-            setGameData(null);
-        } finally {
-            setIsLoading(false);
-        }
-    };
+    const { data, loading, error } = useQuery<{ activeGame: Game }>(ActiveGameQuery);
+    const gameData = data?.activeGame;
+    // const [gameData, setGameData] = useState<Game | null>(data);
 
-    useEffect(() => {
-        fetchActiveGame();
-    }, []);
+    if (error) return <p>Oh no... {error.message}</p>;
 
     const updateScore = async ({
         scoreProp,
@@ -95,14 +96,14 @@ export default function ActiveGame() {
             body: JSON.stringify(updatedGameData),
         });
 
-        setGameData(await response.json());
+        // setGameData(await response.json());
     };
 
     return (
         <section className="text-center">
-            {isLoading ? (<Spinner size="lg" className="mt-40" color="primary" />)
+            {loading ? (<Spinner size="lg" className="mt-40" color="primary" />)
                 : (
-                    <div className={`flex-col ${isLoading ? 'hidden' : ''}`}>
+                    <div className={`flex-col ${loading ? 'hidden' : ''}`}>
                         {gameData ?
                             (<>
                                 <div className="flex flex-row items-center py-4 text-5xl">
