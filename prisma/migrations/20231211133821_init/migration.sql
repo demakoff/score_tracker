@@ -1,5 +1,5 @@
 -- CreateTable
-CREATE TABLE "Games" (
+CREATE TABLE "Game" (
     "id" SERIAL NOT NULL,
     "createdAt" TIMESTAMPTZ(0) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "teamOneName" VARCHAR(20) NOT NULL,

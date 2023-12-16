@@ -106,9 +106,9 @@ export default function ActiveGame() {
                         {gameData ?
                             (<>
                                 <div className="flex flex-row items-center py-4 text-5xl">
-                                    <div className="flex-auto w-4">{gameData.teamOneName}</div>
-                                    <div className="flex-none text-xl px-1">vs</div>
-                                    <div className="flex-auto w-4">{gameData.teamTwoName}</div>
+                                    <div className="flex-auto w-4 text-right">{gameData.teamOneName}</div>
+                                    <div className="flex-none text-xl px-3">vs</div>
+                                    <div className="flex-auto w-4 text-left">{gameData.teamTwoName}</div>
                                 </div>
                                 <div className="py-4 text-9xl">
                                     {gameData.teamOneScore} : {gameData.teamTwoScore}

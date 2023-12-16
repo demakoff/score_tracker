@@ -1,15 +1,4 @@
-export const typeDefs = `
-    type Game {
-        id: ID
-        createdAt: String
-        teamOneName: String
-        teamTwoName: String
-        teamOneScore: Int
-        teamTwoScore: Int
-        winner: String
-    }
+import './types/Game';
+import { builder } from './builder';
 
-    type Query {
-        activeGame: Game
-    }
-`;
+export const schema = builder.toSchema();

@@ -1,0 +1,22 @@
+import { builder } from '../builder';
+import prisma from '@prisma/prisma';
+
+builder.prismaObject('Game', {
+    fields: (t) => ({
+        id: t.exposeID('id'),
+        createdAt: t.exposeString('createdAt'),
+        teamOneName: t.exposeString('teamOneName'),
+        teamTwoName: t.exposeString('teamTwoName'),
+        teamOneScore: t.exposeInt('teamOneScore'),
+        teamTwoScore: t.exposeInt('teamTwoScore'),
+        winner: t.exposeString('winner', { nullable: true }),
+    })
+});
+
+builder.queryField('activeGame', (t) =>
+    t.prismaField({
+        type: 'Game',
+        nullable: true,
+        resolve: () => prisma.game.findFirst({ where: { winner: null } })
+    })
+);
