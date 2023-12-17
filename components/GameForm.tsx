@@ -2,13 +2,13 @@ import { Button, Input } from '@nextui-org/react';
 import React from 'react';
 import { useRouter } from 'next/navigation';
 
-import { NewGame } from '@utils/types';
+import { CreateGameRequestData } from '@utils/types';
 
 export default function GameForm(
     { action, gameData, setGameData, isLoading, handleSubmit }: {
         action: string,
-        gameData: NewGame,
-        setGameData: React.Dispatch<React.SetStateAction<NewGame>>,
+        gameData: CreateGameRequestData,
+        setGameData: React.Dispatch<React.SetStateAction<CreateGameRequestData>>,
         isLoading: boolean,
         handleSubmit: React.FormEventHandler<HTMLFormElement>
     }) {
