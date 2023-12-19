@@ -8,5 +8,8 @@ module.exports = {
         'indent': ['error', 4],
         // we want to avoid extraneous spaces
         'no-multi-spaces': ['error']
+    },
+    'env': {
+        'jest': true
     }
 };

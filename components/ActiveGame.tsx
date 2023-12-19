@@ -59,20 +59,21 @@ export default function ActiveGame() {
         }
     };
 
-    if (activeGameLoading) return (<Spinner size="lg" className="mt-40" color="primary" />);
+    if (activeGameLoading) return (<Spinner data-testid="spinner" size="lg" className="mt-40" color="primary" />);
 
     return (
         <section className="text-center">
             <div className={`flex-col ${activeGameLoading ? 'hidden' : ''}`}>
                 {gameData ?
                     (<>
-                        <div className="flex flex-row items-center py-4 text-5xl">
-                            <div className="flex-auto w-4 text-right">{gameData.teamOneName}</div>
+                        <div className="flex flex-row items-center py-4 text-5xl" >
+                            <span className="flex-auto w-4 text-right" data-testid="team-one-name">{gameData.teamOneName}</span>
                             <div className="flex-none text-xl px-3">vs</div>
-                            <div className="flex-auto w-4 text-left">{gameData.teamTwoName}</div>
+                            <div className="flex-auto w-4 text-left" data-testid="team-two-name">{gameData.teamTwoName}</div>
                         </div>
                         <div className="py-4 text-9xl">
-                            {gameData.teamOneScore} : {gameData.teamTwoScore}
+                            <span data-testid="team-one-score">{gameData.teamOneScore}</span> : <span data-testid="team-two-score">
+                                {gameData.teamTwoScore}</span>
                         </div>
 
                         {gameData.winner ? (
@@ -92,6 +93,7 @@ export default function ActiveGame() {
                                         scoreProp: 'teamOneScore',
                                         teamNameProp: 'teamOneName',
                                     })}
+                                    data-testid="team-one-goal-button"
                                 >
                                     GOAL
                                 </Button>
@@ -103,13 +105,17 @@ export default function ActiveGame() {
                                         scoreProp: 'teamTwoScore',
                                         teamNameProp: 'teamTwoName',
                                     })}
+                                    data-testid="team-two-goal-button"
+
                                 >
                                     GOAL
                                 </Button>
                             </div>
                         )}
                     </>) : (
-                        <StartNewGame text="No active games so far" />
+                        <div data-testid="start-new-game">
+                            <StartNewGame text="No active games so far" />
+                        </div>
                     )}
             </div>
         </section>
