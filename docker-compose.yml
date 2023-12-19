@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+  score_tracker:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+      args:
+        ENV_VARIABLE: NODE_ENV=production
+        NEXT_PUBLIC_ENV_VARIABLE: NODE_ENV=production
+    restart: always
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/postgres?schema=public
+    ports:
+      - 3000:3000
+    networks:
+      - score_tracker_network
+
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: "postgres"
+    healthcheck:
+      test: [“CMD-SHELL”, “pg_isready”]
+      interval: 1s
+      timeout: 5s
+      retries: 10
+    ports:
+      - 5432:5432
+    networks:
+      - score_tracker_network
+    volumes:
+      - score_tracker_pg_data:/var/lib/postgresql/data
+
+networks:
+  score_tracker_network:
+
+volumes:
+  score_tracker_pg_data:

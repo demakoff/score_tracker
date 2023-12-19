@@ -1,0 +1,9 @@
+**/node_modules
+**/.git
+Dockerfile
+.dockerignore
+.eslintrc.js
+.gitignore
+.env
+jest.config.ts
+README.md
