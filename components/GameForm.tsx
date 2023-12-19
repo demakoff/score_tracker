@@ -2,7 +2,7 @@ import { Button, Input } from '@nextui-org/react';
 import React from 'react';
 import { useRouter } from 'next/navigation';
 
-import { CreateGameRequestData } from '@utils/types';
+import { CreateGameRequestData } from '@/utils/types';
 
 export default function GameForm(
     { action, gameData, setGameData, isLoading, handleSubmit }: {

@@ -5,8 +5,8 @@ import { Button, Spinner } from '@nextui-org/react';
 import confetti from 'canvas-confetti';
 import { useQuery, useMutation } from '@apollo/client';
 
-import { Game, UpdateGameRequestData } from '@utils/types';
-import { ActiveGameQuery, UpdateGameMutation } from '@graphql/Game/client-entities';
+import { Game, UpdateGameRequestData } from '@/utils/types';
+import { ActiveGameQuery, UpdateGameMutation } from '@/graphql/Game/client-entities';
 import { StartNewGame } from './StartNewGame';
 
 export default function ActiveGame() {

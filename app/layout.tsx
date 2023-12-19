@@ -1,7 +1,7 @@
 import React from 'react';
 import type { Metadata } from 'next';
 import { Teko } from 'next/font/google';
-import '@styles/globals.css';
+import '@/styles/globals.css';
 import { Providers } from './providers';
 
 const font = Teko({ subsets: ['latin'], weight: '300' });

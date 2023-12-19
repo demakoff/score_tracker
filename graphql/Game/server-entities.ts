@@ -1,5 +1,5 @@
 import { builder } from '../builder';
-import prisma from '@prisma/prisma';
+import prisma from '@/prisma/prisma';
 
 builder.prismaObject('Game', {
     fields: (t) => ({

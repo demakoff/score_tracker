@@ -1,12 +1,12 @@
 'use client';
 
-import GameForm from '@components/GameForm';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
 
-import type { Game, CreateGameRequestData } from '@utils/types';
-import { CreateGameMutation } from '@graphql/Game/client-entities';
+import GameForm from '@/components/GameForm';
+import type { Game, CreateGameRequestData } from '@/utils/types';
+import { CreateGameMutation } from '@/graphql/Game/client-entities';
 
 export default function NewGamePage() {
     const router = useRouter();
