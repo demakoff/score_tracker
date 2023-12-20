@@ -15,16 +15,38 @@ query GetActiveGame{
 `;
 
 export const CreateGameMutation = gql`
-    mutation CreateGame($teamOneName: String!, $teamTwoName: String!) {
-        createGame(teamOneName: $teamOneName, teamTwoName: $teamTwoName) {
+    mutation CreateGame(
+        $teamOneName: String!, 
+        $teamTwoName: String!, 
+        $teamOneScore: Int, 
+        $teamTwoScore: Int, 
+        $winner: String) 
+    {
+        createGame(
+            teamOneName: $teamOneName, 
+            teamTwoName: $teamTwoName, 
+            teamOneScore: $teamOneScore, 
+            teamTwoScore: $teamTwoScore, 
+            winner: $winner) 
+        {
             id
         }
     }
 `;
 
 export const UpdateGameMutation = gql`
-mutation UpdateGame($id: Int!, $teamOneScore: Int!, $teamTwoScore: Int!, $winner: String) {
-    updateGame(id: $id, teamOneScore: $teamOneScore, teamTwoScore: $teamTwoScore, winner: $winner) {
+mutation UpdateGame(
+    $id: Int!, 
+    $teamOneScore: Int!, 
+    $teamTwoScore: Int!, 
+    $winner: String) 
+{
+    updateGame(
+        id: $id, 
+        teamOneScore: $teamOneScore, 
+        teamTwoScore: $teamTwoScore, 
+        winner: $winner) 
+    {
         id,
         createdAt,
         teamOneName,

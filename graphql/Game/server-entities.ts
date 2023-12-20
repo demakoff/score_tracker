@@ -1,12 +1,11 @@
 import { builder } from '../builder';
 import prisma from '@/prisma/prisma';
+import type { CreateGameRequestData } from '@/utils/types';
 
 builder.prismaObject('Game', {
     fields: (t) => ({
         id: t.exposeInt('id'),
-        createdAt: t.expose('createdAt', {
-            type: 'Date',
-        }),
+        createdAt: t.expose('createdAt', { type: 'Date', }),
         teamOneName: t.exposeString('teamOneName'),
         teamTwoName: t.exposeString('teamTwoName'),
         teamOneScore: t.exposeInt('teamOneScore'),
@@ -29,16 +28,28 @@ builder.mutationField('createGame', (t) =>
         args: {
             teamOneName: t.arg.string({ required: true }),
             teamTwoName: t.arg.string({ required: true }),
+            teamOneScore: t.arg.int(),
+            teamTwoScore: t.arg.int(),
+            winner: t.arg.string(),
         },
         resolve: async (query, _parent, args) => {
-            const { teamOneName, teamTwoName } = args;
+            const { teamOneName, teamTwoName, teamOneScore, teamTwoScore, winner } = args;
 
-            return prisma.game.create({
-                data: {
-                    teamOneName,
-                    teamTwoName,
-                }
-            });
+            const data: CreateGameRequestData = {
+                teamOneName,
+                teamTwoName,
+            };
+
+            if (typeof teamOneScore === 'number'
+                && typeof teamTwoScore === 'number'
+                && winner) {
+
+                data.teamOneScore = teamOneScore;
+                data.teamTwoScore = teamTwoScore;
+                data.winner = winner;
+            }
+
+            return prisma.game.create({ data });
         }
     })
 );
