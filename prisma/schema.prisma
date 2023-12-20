@@ -1,5 +1,5 @@
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 generator pothos {
@@ -7,17 +7,28 @@ generator pothos {
 }
 
 datasource db {
-    provider = "postgresql"
-    url      = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model Game {
-    id           Int      @id @default(autoincrement())
-    createdAt    DateTime @default(now()) @db.Timestamptz(0)
-    teamOneName  String   @db.VarChar(20)
-    teamTwoName  String   @db.VarChar(20)
-    teamOneScore Int      @default(0) @db.SmallInt
-    teamTwoScore Int      @default(0) @db.SmallInt
-    winner       String?  @db.VarChar(20)
+  id                      Int      @id @default(autoincrement())
+  createdAt               DateTime @default(now()) @db.Timestamptz(0)
+  teamOne                 Int?
+  teamTwo                 Int?
+  teamOneScore            Int      @default(0) @db.SmallInt
+  teamTwoScore            Int      @default(0) @db.SmallInt
+  winner                  Int?
+  Team_Game_teamOneToTeam Team?    @relation("Game_teamOneToTeam", fields: [teamOne], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Team_Game_teamTwoToTeam Team?    @relation("Game_teamTwoToTeam", fields: [teamTwo], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Team_Game_winnerToTeam  Team?    @relation("Game_winnerToTeam", fields: [winner], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model Team {
+  id                      Int    @id @default(autoincrement())
+  name                    String @unique @db.VarChar(20)
+  Game_Game_teamOneToTeam Game[] @relation("Game_teamOneToTeam")
+  Game_Game_teamTwoToTeam Game[] @relation("Game_teamTwoToTeam")
+  Game_Game_winnerToTeam  Game[] @relation("Game_winnerToTeam")
 }

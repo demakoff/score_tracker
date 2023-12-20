@@ -1,4 +1,4 @@
-import ActiveGame from '@/components/ActiveGame';
+import ActiveGame from '@/components/pages/ActiveGame';
 
 export default function Home() {
     return (

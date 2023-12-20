@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing';
 
 import { ActiveGameQuery, UpdateGameMutation } from '@/graphql/Game/client-entities';
-import ActiveGame from '@/components/ActiveGame';
+import ActiveGame from '@/components/pages/ActiveGame';
 
 describe('ActiveGame component', () => {
 
@@ -52,8 +52,8 @@ describe('ActiveGame component', () => {
                     activeGame: {
                         id: 1,
                         createdAt: '1702827347000',
-                        teamOneName: 'Barcelona',
-                        teamTwoName: 'Arsenal',
+                        teamOne: { name: 'Barcelona' },
+                        teamTwo: { name: 'Arsenal' },
                         teamOneScore: 5,
                         teamTwoScore: 7,
                         winner: null
@@ -70,8 +70,8 @@ describe('ActiveGame component', () => {
 
         await waitForElementToBeRemoved(() => screen.getByTestId('spinner'));
 
-        expect(await screen.getByTestId('team-one-name').innerHTML).toBe('Barcelona');
-        expect(await screen.getByTestId('team-two-name').innerHTML).toBe('Arsenal');
+        expect(await screen.getByText('Barcelona')).toBeInTheDocument();
+        expect(await screen.getByText('Arsenal')).toBeInTheDocument();
         expect(await screen.getByTestId('team-one-score').innerHTML).toBe('5');
         expect(await screen.getByTestId('team-two-score').innerHTML).toBe('7');
         expect(await screen.getAllByRole('button', { name: 'GOAL' }).length).toBe(2);
@@ -86,8 +86,8 @@ describe('ActiveGame component', () => {
                     activeGame: {
                         id: 1,
                         createdAt: '1702827347000',
-                        teamOneName: 'Barcelona',
-                        teamTwoName: 'Arsenal',
+                        teamOne: { name: 'Barcelona' },
+                        teamTwo: { name: 'Arsenal' },
                         teamOneScore: 0,
                         teamTwoScore: 0,
                         winner: null,
@@ -109,8 +109,8 @@ describe('ActiveGame component', () => {
                     updateGame: {
                         id: 1,
                         createdAt: '1702827347000',
-                        teamOneName: 'Barcelona',
-                        teamTwoName: 'Arsenal',
+                        teamOne: { name: 'Barcelona' },
+                        teamTwo: { name: 'Arsenal' },
                         teamOneScore: 1,
                         teamTwoScore: 0,
                         winner: null,
@@ -143,8 +143,8 @@ describe('ActiveGame component', () => {
                     activeGame: {
                         id: 1,
                         createdAt: '1702827347000',
-                        teamOneName: 'Barcelona',
-                        teamTwoName: 'Arsenal',
+                        teamOne: { name: 'Barcelona' },
+                        teamTwo: { name: 'Arsenal' },
                         teamOneScore: 9,
                         teamTwoScore: 9,
                         winner: null,
@@ -167,11 +167,11 @@ describe('ActiveGame component', () => {
                     updateGame: {
                         id: 1,
                         createdAt: '1702827347000',
-                        teamOneName: 'Barcelona',
-                        teamTwoName: 'Arsenal',
+                        teamOne: { name: 'Barcelona' },
+                        teamTwo: { name: 'Arsenal' },
                         teamOneScore: 9,
                         teamTwoScore: 10,
-                        winner: 'Arsenal',
+                        winner: { name: 'Arsenal' },
                     }
                 }
             }

@@ -1,18 +1,25 @@
 import { builder } from '../builder';
 import prisma from '@/prisma/prisma';
-import type { CreateGameRequestData } from '@/utils/types';
+
+builder.prismaObject('Team', {
+    fields: (t) => ({
+        id: t.exposeInt('id'),
+        name: t.exposeString('name'),
+    })
+});
 
 builder.prismaObject('Game', {
     fields: (t) => ({
         id: t.exposeInt('id'),
         createdAt: t.expose('createdAt', { type: 'Date', }),
-        teamOneName: t.exposeString('teamOneName'),
-        teamTwoName: t.exposeString('teamTwoName'),
+        teamOne: t.relation('Team_Game_teamOneToTeam'),
+        teamTwo: t.relation('Team_Game_teamTwoToTeam'),
         teamOneScore: t.exposeInt('teamOneScore'),
         teamTwoScore: t.exposeInt('teamTwoScore'),
-        winner: t.exposeString('winner', { nullable: true }),
+        winner: t.relation('Team_Game_winnerToTeam', { nullable: true }),
     })
 });
+
 
 builder.queryField('activeGame', (t) =>
     t.prismaField({
@@ -26,27 +33,32 @@ builder.mutationField('createGame', (t) =>
     t.prismaField({
         type: 'Game',
         args: {
-            teamOneName: t.arg.string({ required: true }),
-            teamTwoName: t.arg.string({ required: true }),
+            teamOne: t.arg.string({ required: true }),
+            teamTwo: t.arg.string({ required: true }),
             teamOneScore: t.arg.int(),
             teamTwoScore: t.arg.int(),
             winner: t.arg.string(),
         },
         resolve: async (query, _parent, args) => {
-            const { teamOneName, teamTwoName, teamOneScore, teamTwoScore, winner } = args;
+            const { teamOne, teamTwo, teamOneScore, teamTwoScore, winner } = args;
 
-            const data: CreateGameRequestData = {
-                teamOneName,
-                teamTwoName,
+            const teamOneData = await prisma.team.findUniqueOrThrow({ where: { name: teamOne } });
+            const teamTwoData = await prisma.team.findUniqueOrThrow({ where: { name: teamTwo } });
+
+            const data: any = {
+                teamOne: teamOneData.id,
+                teamTwo: teamTwoData.id,
             };
 
             if (typeof teamOneScore === 'number'
                 && typeof teamTwoScore === 'number'
                 && winner) {
 
+                const winnerData = await prisma.team.findUniqueOrThrow({ where: { name: winner } });
+
                 data.teamOneScore = teamOneScore;
                 data.teamTwoScore = teamTwoScore;
-                data.winner = winner;
+                data.winner = winnerData.id;
             }
 
             return prisma.game.create({ data });
@@ -66,16 +78,42 @@ builder.mutationField('updateGame', (t) =>
         resolve: async (query, _parent, args) => {
             const { id, teamOneScore, teamTwoScore, winner } = args;
 
+            const data: any = {
+                teamOneScore,
+                teamTwoScore,
+            };
+
+            if (winner) {
+                const team = await prisma.team.findUniqueOrThrow({ where: { name: winner } });
+                data.winner = team.id;
+            }
+
             return prisma.game.update({
-                where: {
-                    id
-                },
-                data: {
-                    teamOneScore,
-                    teamTwoScore,
-                    winner
-                }
+                where: { id },
+                data,
             });
+        }
+    })
+);
+
+builder.queryField('teams', (t) =>
+    t.prismaField({
+        type: ['Team'],
+        nullable: true,
+        resolve: (query) => prisma.team.findMany({ ...query })
+    })
+);
+
+builder.mutationField('createTeam', (t) =>
+    t.prismaField({
+        type: 'Team',
+        args: {
+            name: t.arg.string({ required: true }),
+        },
+        resolve: async (query, _parent, args) => {
+            const { name } = args;
+
+            return prisma.team.create({ data: { name } });
         }
     })
 );

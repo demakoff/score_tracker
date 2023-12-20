@@ -3,28 +3,34 @@ import { gql } from '@apollo/client';
 export const ActiveGameQuery = gql`
 query GetActiveGame{
     activeGame {
-        id,
-        createdAt,
-        teamOneName,
-        teamTwoName,
-        teamOneScore,
-        teamTwoScore,
-        winner
+        id
+        createdAt
+        teamOne {
+          name
+        }
+        teamTwo {
+          name
+        }
+        teamOneScore
+        teamTwoScore
+        winner {
+          name
+        }
     }
 }    
 `;
 
 export const CreateGameMutation = gql`
     mutation CreateGame(
-        $teamOneName: String!, 
-        $teamTwoName: String!, 
+        $teamOne: String!, 
+        $teamTwo: String!, 
         $teamOneScore: Int, 
         $teamTwoScore: Int, 
         $winner: String) 
     {
         createGame(
-            teamOneName: $teamOneName, 
-            teamTwoName: $teamTwoName, 
+            teamOne: $teamOne, 
+            teamTwo: $teamTwo, 
             teamOneScore: $teamOneScore, 
             teamTwoScore: $teamTwoScore, 
             winner: $winner) 
@@ -49,11 +55,35 @@ mutation UpdateGame(
     {
         id,
         createdAt,
-        teamOneName,
-        teamTwoName,
+        teamOne {
+            name
+        },
+        teamTwo {
+            name
+        },
         teamOneScore,
         teamTwoScore,
-        winner
+        winner {
+            name
+        }
     }
 }
+`;
+
+export const GetAllTeamsQuery = gql`
+query GetAllTeams {
+    teams {
+        id,
+        name,
+    }
+}    
+`;
+
+export const CreateTeamMutation = gql`
+    mutation CreateTeam($name: String!) {
+        createTeam(name: $name) 
+        {
+            id
+        }
+    }
 `;

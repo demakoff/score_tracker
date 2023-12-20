@@ -7,7 +7,7 @@ import { useQuery, useMutation } from '@apollo/client';
 
 import { Game, UpdateGameRequestData } from '@/utils/types';
 import { ActiveGameQuery, UpdateGameMutation } from '@/graphql/Game/client-entities';
-import { StartNewGame } from './StartNewGame';
+import { StartNewGame } from '../StartNewGame';
 
 export default function ActiveGame() {
 
@@ -26,14 +26,14 @@ export default function ActiveGame() {
         onError: (error) => console.error(error),
     });
 
-    if (error) return <p>Oh no... Ccnnot retrieve active game. {error.message}</p>;
+    if (error) return <p>Oh no... Cannot retrieve active game. {error.message}</p>;
 
     const updateScore = async ({
         scoreProp,
-        teamNameProp,
+        teamProp,
     }: {
         scoreProp: 'teamOneScore' | 'teamTwoScore';
-        teamNameProp: 'teamOneName' | 'teamTwoName';
+        teamProp: 'teamOne' | 'teamTwo';
     }) => {
         if (!gameData || gameData.winner) return;
 
@@ -43,7 +43,7 @@ export default function ActiveGame() {
                     id: gameData.id,
                     teamOneScore: { ...gameData, [scoreProp]: 10 }['teamOneScore'],
                     teamTwoScore: { ...gameData, [scoreProp]: 10 }['teamTwoScore'],
-                    winner: gameData[teamNameProp],
+                    winner: gameData[teamProp].name,
                 }
             });
             confetti();
@@ -67,9 +67,9 @@ export default function ActiveGame() {
                 {gameData ?
                     (<>
                         <div className="flex flex-row items-center py-4 text-5xl" >
-                            <span className="flex-auto w-4 text-right" data-testid="team-one-name">{gameData.teamOneName}</span>
+                            <span className="flex-auto w-4 text-right">{gameData.teamOne.name}</span>
                             <div className="flex-none text-xl px-3">vs</div>
-                            <div className="flex-auto w-4 text-left" data-testid="team-two-name">{gameData.teamTwoName}</div>
+                            <div className="flex-auto w-4 text-left">{gameData.teamTwo.name}</div>
                         </div>
                         <div className="py-4 text-9xl">
                             <span data-testid="team-one-score">{gameData.teamOneScore}</span> : <span data-testid="team-two-score">
@@ -79,7 +79,7 @@ export default function ActiveGame() {
                         {gameData.winner ? (
                             <div className="py-4 text-4xl">
                                 <p>
-                                    &quot;{gameData.winner}&quot; is a winner!
+                                    &quot;{gameData.winner.name}&quot; is a winner!
                                 </p>
                                 <StartNewGame text="One more time?" />
                             </div>
@@ -91,7 +91,7 @@ export default function ActiveGame() {
                                     size="md"
                                     onClick={() => updateScore({
                                         scoreProp: 'teamOneScore',
-                                        teamNameProp: 'teamOneName',
+                                        teamProp: 'teamOne',
                                     })}
                                     data-testid="team-one-goal-button"
                                 >
@@ -103,7 +103,7 @@ export default function ActiveGame() {
                                     size="md"
                                     onClick={() => updateScore({
                                         scoreProp: 'teamTwoScore',
-                                        teamNameProp: 'teamTwoName',
+                                        teamProp: 'teamTwo',
                                     })}
                                     data-testid="team-two-goal-button"
 

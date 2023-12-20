@@ -1,20 +1,29 @@
 export type Game = {
     id: number;
     createdAt: Date;
-    teamOneName: string;
-    teamTwoName: string;
+    teamOne: { name: Team['name'] };
+    teamTwo: { name: Team['name'] };
     teamOneScore: number;
     teamTwoScore: number;
-    winner?: string;
+    winner?: { name: Team['name'] };
 };
 
-export type CreateGameRequestData = {
-    teamOneName: Game['teamOneName'];
-    teamTwoName: Game['teamTwoName'];
-    teamOneScore?: Game['teamOneScore'];
-    teamTwoScore?: Game['teamTwoScore'];
-    winner?: Game['winner'];
-
+export type Team = {
+    id: number;
+    name: string;
 }
 
-export type UpdateGameRequestData = Pick<Game, 'id' | 'teamOneScore' | 'teamTwoScore' | 'winner'>;
+export type CreateGameRequestData = {
+    teamOne: Team['name'];
+    teamTwo: Team['name'];
+    teamOneScore?: Game['teamOneScore'];
+    teamTwoScore?: Game['teamTwoScore'];
+    winner?: Team['name'];
+}
+
+export type UpdateGameRequestData = {
+    id: Team['id'];
+    teamOneScore: Game['teamOneScore'];
+    teamTwoScore: Game['teamTwoScore'];
+    winner?: Team['name'];
+}
