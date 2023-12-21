@@ -19,6 +19,21 @@ query GetActiveGame{
     }
 }    
 `;
+export const GetGamesQuery = gql`
+query GetGames($teamId: Int, $finished: Boolean){
+    games(teamId: $teamId, finished: $finished) {
+        id
+        teamOne {
+          name
+        }
+        teamTwo {
+          name
+        }
+        teamOneScore
+        teamTwoScore
+    }
+}    
+`;
 
 export const CreateGameMutation = gql`
     mutation CreateGame(
@@ -26,8 +41,8 @@ export const CreateGameMutation = gql`
         $teamTwo: String!, 
         $teamOneScore: Int, 
         $teamTwoScore: Int, 
-        $winner: String) 
-    {
+        $winner: String
+    ) {
         createGame(
             teamOne: $teamOne, 
             teamTwo: $teamTwo, 

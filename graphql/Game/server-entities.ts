@@ -23,6 +23,27 @@ builder.queryField('activeGame', (t) =>
     })
 );
 
+builder.queryField('games', (t) =>
+    t.prismaField({
+        type: ['Game'],
+        nullable: true,
+        args: {
+            teamId: t.arg.int(),
+            finished: t.arg.boolean(),
+        },
+        resolve: (query, _parent, args) => {
+            const where: any = args.teamId ?
+                { OR: [{ teamOne: args.teamId }, { teamTwo: args.teamId }] } : {};
+
+            if (args.finished) {
+                where.NOT = { winner: null };
+            }
+
+            return prisma.game.findMany({ ...query, where, orderBy: { createdAt: 'desc' } });
+        }
+    })
+);
+
 builder.mutationField('createGame', (t) =>
     t.prismaField({
         type: 'Game',
