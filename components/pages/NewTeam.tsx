@@ -1,27 +1,38 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 
 import type { Team } from '@/utils/types';
-import { CreateTeamMutation } from '@/graphql/Team/client-entities';
+import { CreateTeamMutation, GetAllTeamsQuery } from '@/graphql/Team/client-entities';
 import { Button, Input } from '@nextui-org/react';
 import { StartNewGame } from '@/components/StartNewGame';
+import TeamsList from '../TeamsList';
 
 export default function NewTeam() {
 
     const [name, setName] = useState<Team['name']>('');
 
+    const {
+        data: createdTeams,
+        refetch
+    } = useQuery<{ teams: Team[] }>(GetAllTeamsQuery, {
+        fetchPolicy: 'network-only',
+    });
+
     const [createTeam, { loading }] = useMutation<{ createTeam: { id: Team['id'] } }, { name: Team['name'] }>(CreateTeamMutation, {
-        onCompleted: () => setName(''),
+        onCompleted: () => {
+            setName('');
+            refetch();
+        },
         onError: (error) => console.error(error)
     });
 
     return (
-        <div className="py-4 text-4xl">
+        <div className="py-2 text-4xl">
             <Input
                 type="text"
-                className="my-4"
+                className="my-2"
                 classNames={{
                     label: 'text-xl',
                     input: 'text-2xl',
@@ -34,14 +45,16 @@ export default function NewTeam() {
             />
             <Button
                 color="primary"
-                className="my-4 text-3xl w-full h-20"
+                className="my-2 text-3xl w-full h-16"
                 onClick={() => createTeam({ variables: { name } })}
                 isDisabled={loading}
             >
                 {loading ? 'Creating' : 'Create'} new team
             </Button>
 
-            <StartNewGame text="Let's play?" />
+            <StartNewGame />
+
+            {createdTeams ? <TeamsList data={createdTeams.teams} /> : (null)}
         </div>
     );
 }

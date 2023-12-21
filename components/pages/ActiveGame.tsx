@@ -6,13 +6,21 @@ import confetti from 'canvas-confetti';
 import { useQuery, useMutation } from '@apollo/client';
 
 import { Game, UpdateGameRequestData } from '@/utils/types';
-import { ActiveGameQuery, UpdateGameMutation } from '@/graphql/Game/client-entities';
+import { ActiveGameQuery, GetGamesQuery, UpdateGameMutation } from '@/graphql/Game/client-entities';
 import { StartNewGame } from '@/components/StartNewGame';
 import GoalButton from '@/components/GoalButton';
+import GamesList from '../GamesList';
 
 export default function ActiveGame() {
 
     const [gameData, setGameData] = useState<Game>();
+
+    const {
+        data: finishedGames
+    } = useQuery<{ games: Game[] }>(GetGamesQuery, {
+        fetchPolicy: 'network-only',
+        variables: { finished: true }
+    });
 
     const {
         loading: activeGameLoading,
@@ -96,6 +104,7 @@ export default function ActiveGame() {
                             <StartNewGame text="No active games so far" />
                         </div>
                     )}
+                {finishedGames ? <GamesList data={finishedGames.games} /> : (null)}
             </div>
         </section>
     );

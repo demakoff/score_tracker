@@ -72,7 +72,7 @@ export default function NewGame() {
                             onChange={(e) => setGameData({ ...gameData, teamOne: e.target.value })}
                         >
                             {teams.filter(item => item.name !== gameData.teamTwo).map((team) => (
-                                <SelectItem key={team.name} value={team.name}>
+                                <SelectItem classNames={{ title: ['text-xl'] }} key={team.name} value={team.name}>
                                     {team.name}
                                 </SelectItem>
                             ))}
@@ -87,7 +87,7 @@ export default function NewGame() {
                             onChange={(e) => setGameData({ ...gameData, teamTwo: e.target.value })}
                         >
                             {teams.filter(item => item.name !== gameData.teamOne).map((team) => (
-                                <SelectItem key={team.name} value={team.name}>
+                                <SelectItem classNames={{ title: ['text-xl'] }} key={team.name} value={team.name}>
                                     {team.name}
                                 </SelectItem>
                             ))}

@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { Teko } from 'next/font/google';
 import '@/styles/globals.css';
 import { Providers } from './providers';
+import Navigation from '@/components/Navigation';
 
 const font = Teko({ subsets: ['latin'], weight: '300' });
 
@@ -25,6 +26,7 @@ export default function RootLayout({
                         <h1 className={headerClasses}>
                             Brand new Kicker score tracker
                         </h1>
+                        <Navigation />
                         {children}
                     </main>
                 </Providers>

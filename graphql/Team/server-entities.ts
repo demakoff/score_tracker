@@ -12,7 +12,7 @@ builder.queryField('teams', (t) =>
     t.prismaField({
         type: ['Team'],
         nullable: true,
-        resolve: (query) => prisma.team.findMany({ ...query })
+        resolve: (query) => prisma.team.findMany({ ...query, orderBy: { id: 'desc' } })
     })
 );
 
