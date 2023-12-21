@@ -11,19 +11,19 @@ export default function NewGame() {
     const router = useRouter();
 
     const [teams, setTeams] = useState<Team[]>([]);
+    const [gameFinished, setGameFinished] = useState(false);
+    const [gameData, setGameData] = useState<CreateGameRequestData>({
+        teamOne: '',
+        teamTwo: '',
+        teamOneScore: 0,
+        teamTwoScore: 0,
+    });
 
     const {
         loading: teamsLoading,
     } = useQuery<{ teams: Team[] }>(GetAllTeamsQuery, {
         fetchPolicy: 'network-only',
         onCompleted: (data) => setTeams(data.teams),
-    });
-
-    const [gameData, setGameData] = useState<CreateGameRequestData>({
-        teamOne: '',
-        teamTwo: '',
-        teamOneScore: 0,
-        teamTwoScore: 0,
     });
 
     const [
@@ -44,22 +44,14 @@ export default function NewGame() {
             teamTwo: gameData.teamTwo,
         };
 
-        if (gameData.teamOneScore === 10) {
+        if (gameFinished) {
             variables.teamOneScore = gameData.teamOneScore;
             variables.teamTwoScore = gameData.teamTwoScore;
-            variables.winner = gameData.teamOne;
-        }
-
-        if (gameData.teamTwoScore === 10) {
-            variables.teamOneScore = gameData.teamOneScore;
-            variables.teamTwoScore = gameData.teamTwoScore;
-            variables.winner = gameData.teamTwo;
+            variables.winner = gameData.teamOneScore === 10 ? gameData.teamOne : gameData.teamTwo;
         }
 
         await createGame({ variables });
     };
-
-    const [gameFinished, setGameFinished] = useState(false);
 
     return (
         <section className='w-full text-center'>
@@ -73,16 +65,7 @@ export default function NewGame() {
                     <div className='flex-auto w-4'>
                         <Select
                             placeholder="Select a team"
-                            classNames={{
-                                value: 'text-xl',
-                            }}
-                            listboxProps={{
-                                itemClasses: {
-                                    base: [
-                                        'text-xl',
-                                    ],
-                                },
-                            }}
+                            classNames={{ value: 'text-xl' }}
                             variant='underlined'
                             selectedKeys={[gameData.teamOne]}
                             onChange={(e) => setGameData({ ...gameData, teamOne: e.target.value })}
@@ -96,11 +79,8 @@ export default function NewGame() {
                     </div>
                     <div className='flex-auto w-4'>
                         <Select
-                            items={teams}
                             placeholder="Select a team"
-                            classNames={{
-                                value: 'text-xl',
-                            }}
+                            classNames={{ value: 'text-xl' }}
                             variant='underlined'
                             selectedKeys={[gameData.teamTwo]}
                             onChange={(e) => setGameData({ ...gameData, teamTwo: e.target.value })}
@@ -115,9 +95,7 @@ export default function NewGame() {
                 </div>
 
                 <Checkbox
-                    classNames={{
-                        label: 'text-xl',
-                    }}
+                    classNames={{ label: 'text-xl' }}
                     isSelected={gameFinished}
                     onValueChange={setGameFinished}
                 >Finished game</Checkbox>

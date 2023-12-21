@@ -1,13 +1,14 @@
 'use client';
 
 import { useState } from 'react';
-import { Button, Spinner } from '@nextui-org/react';
+import { Spinner } from '@nextui-org/react';
 import confetti from 'canvas-confetti';
 import { useQuery, useMutation } from '@apollo/client';
 
 import { Game, UpdateGameRequestData } from '@/utils/types';
 import { ActiveGameQuery, UpdateGameMutation } from '@/graphql/Game/client-entities';
-import { StartNewGame } from '../StartNewGame';
+import { StartNewGame } from '@/components/StartNewGame';
+import GoalButton from '@/components/GoalButton';
 
 export default function ActiveGame() {
 
@@ -26,39 +27,30 @@ export default function ActiveGame() {
         onError: (error) => console.error(error),
     });
 
-    if (error) return <p>Oh no... Cannot retrieve active game. {error.message}</p>;
-
-    const updateScore = async ({
-        scoreProp,
-        teamProp,
-    }: {
+    const updateScore = async ({ scoreProp, teamProp }: {
         scoreProp: 'teamOneScore' | 'teamTwoScore';
         teamProp: 'teamOne' | 'teamTwo';
     }) => {
         if (!gameData || gameData.winner) return;
 
-        if (gameData[scoreProp] === 9) {
-            await updateGame({
-                variables: {
-                    id: gameData.id,
-                    teamOneScore: { ...gameData, [scoreProp]: 10 }['teamOneScore'],
-                    teamTwoScore: { ...gameData, [scoreProp]: 10 }['teamTwoScore'],
-                    winner: gameData[teamProp].name,
-                }
-            });
-            confetti();
-        } else {
-            const updatedScore = gameData[scoreProp] + 1;
-            await updateGame({
-                variables: {
-                    id: gameData.id,
-                    teamOneScore: { ...gameData, [scoreProp]: updatedScore }['teamOneScore'],
-                    teamTwoScore: { ...gameData, [scoreProp]: updatedScore }['teamTwoScore'],
-                }
-            });
+        const updatedScore = gameData[scoreProp] + 1;
+
+        const variables: UpdateGameRequestData = {
+            id: gameData.id,
+            teamOneScore: { ...gameData, [scoreProp]: updatedScore }['teamOneScore'],
+            teamTwoScore: { ...gameData, [scoreProp]: updatedScore }['teamTwoScore'],
+        };
+
+        if (updatedScore === 10) {
+            variables.winner = gameData[teamProp].name;
         }
+
+        await updateGame({ variables });
+
+        if (updatedScore === 10) confetti();
     };
 
+    if (error) return (<p>Oh no... Cannot retrieve active game. {error.message}</p>);
     if (activeGameLoading) return (<Spinner data-testid="spinner" size="lg" className="mt-40" color="primary" />);
 
     return (
@@ -78,38 +70,25 @@ export default function ActiveGame() {
 
                         {gameData.winner ? (
                             <div className="py-4 text-4xl">
-                                <p>
-                                    &quot;{gameData.winner.name}&quot; is a winner!
-                                </p>
+                                <p>&quot;{gameData.winner.name}&quot; is a winner!</p>
                                 <StartNewGame text="One more time?" />
                             </div>
                         ) : (
                             <div className="flex space-x-4 py-4">
-                                <Button
-                                    className="flex-auto text-4xl h-20"
-                                    color="success"
-                                    size="md"
-                                    onClick={() => updateScore({
+                                <GoalButton
+                                    handleClick={() => updateScore({
                                         scoreProp: 'teamOneScore',
                                         teamProp: 'teamOne',
                                     })}
-                                    data-testid="team-one-goal-button"
-                                >
-                                    GOAL
-                                </Button>
-                                <Button
-                                    className="flex-auto text-4xl h-20"
-                                    color="success"
-                                    size="md"
-                                    onClick={() => updateScore({
+                                    testId="team-one-goal-button"
+                                />
+                                <GoalButton
+                                    handleClick={() => updateScore({
                                         scoreProp: 'teamTwoScore',
                                         teamProp: 'teamTwo',
                                     })}
-                                    data-testid="team-two-goal-button"
-
-                                >
-                                    GOAL
-                                </Button>
+                                    testId="team-two-goal-button"
+                                />
                             </div>
                         )}
                     </>) : (
