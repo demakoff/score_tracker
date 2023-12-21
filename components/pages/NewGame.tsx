@@ -4,7 +4,8 @@ import { useRouter } from 'next/navigation';
 import { useMutation, useQuery } from '@apollo/client';
 
 import type { Game, CreateGameRequestData, Team } from '@/utils/types';
-import { CreateGameMutation, GetAllTeamsQuery } from '@/graphql/Game/client-entities';
+import { CreateGameMutation } from '@/graphql/Game/client-entities';
+import { GetAllTeamsQuery } from '@/graphql/Team/client-entities';
 
 export default function NewGame() {
 

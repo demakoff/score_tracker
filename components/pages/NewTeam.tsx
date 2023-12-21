@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
 
 import type { Team } from '@/utils/types';
-import { CreateTeamMutation } from '@/graphql/Game/client-entities';
+import { CreateTeamMutation } from '@/graphql/Team/client-entities';
 import { Button, Input } from '@nextui-org/react';
 import { StartNewGame } from '@/components/StartNewGame';
 
