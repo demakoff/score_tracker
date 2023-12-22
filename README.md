@@ -9,8 +9,10 @@
 5. Run `docker compose build` in the terminal (may take about 2-4 mins).
 6. Make sure that localhost ports `3000` (used by app) and `5432` (used by database) and free. Otherwise you will see `EADDRINUSE` error
 7. Run `docker compose up -d` to run container is detached (background) mode
-8. Open app with `http://localhost:3000`.
-9. To provide the best UX, it's recommended to open the site in mobile view (e.g. via Chrome Devtool).
+8. Open the app with `http://localhost:3000`. The first cold run may take some additional time (up to 1 min).
+9. To explore API, please visit `http://localhost:3000/api/graphql`
+10. To provide the best UX, it's recommended to open the site in mobile view (e.g. via Chrome Devtool).
+   
 
 
 ## Assumptions
