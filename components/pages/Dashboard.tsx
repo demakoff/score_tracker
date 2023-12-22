@@ -46,7 +46,10 @@ const columns = [
 
 export default function Dashboard() {
 
+    const [selectedTeams, setselectedTeams] = React.useState<Selection>(new Set([]));
+
     const [selectedTeamGamesData, setSelectedTeamGamesData] = useState<Game[]>();
+    const [confrontationResult, setConfrontationResult] = useState<string>('');
 
     const {
         refetch
@@ -68,18 +71,64 @@ export default function Dashboard() {
     const handleTeamSelection = async (keys: Selection) => {
         const teamIds = Array.from(keys);
 
-        if (!teamIds.length) return setSelectedTeamGamesData(undefined);
+        if (teamIds.length > 2) return;
 
-        const { data } = await refetch({ teamId: Number(teamIds[0]), finished: true });
-        setSelectedTeamGamesData(data.games);
+        setselectedTeams(keys);
+
+        if (!teamIds.length) {
+            setSelectedTeamGamesData(undefined);
+            setConfrontationResult('');
+            return;
+        }
+
+        if (teamIds.length === 1) {
+            const { data } = await refetch({ teamId: Number(teamIds[0]), teamTwoId: undefined, finished: true });
+            setSelectedTeamGamesData(data.games);
+            setConfrontationResult('');
+        }
+
+        if (teamIds.length === 2) {
+            const { data } = await refetch({
+                teamId: Number(teamIds[0]),
+                teamTwoId: Number(teamIds[1]),
+                finished: true
+            });
+
+            const selectedTeamOne = teamStatsData!.teamStats!.find(item => item.id === Number(teamIds[0]));
+            const selectedTeamTwo = teamStatsData!.teamStats!.find(item => item.id === Number(teamIds[1]));
+
+            const aggrData = data.games.reduce((acc, game) => {
+                if (game.winner!.name === acc.teamOne.name) {
+                    acc.teamOne.wins++;
+                } else {
+                    acc.teamTwo.wins++;
+                }
+                return acc;
+            }, {
+                teamOne: { name: selectedTeamOne!.name, wins: 0 },
+                teamTwo: { name: selectedTeamTwo!.name, wins: 0 }
+            });
+
+            setConfrontationResult(
+                `"${aggrData.teamOne.name}" wins in direct confrontations with "${aggrData.teamTwo.name}":  ${aggrData.teamOne.wins} - ${aggrData.teamTwo.wins}`
+            );
+
+            setSelectedTeamGamesData(data.games);
+        }
     };
 
     return (
         <div className="py-4 text-xl">
             <Table
+                aria-label="Teams statistics dashboard"
                 removeWrapper
-                classNames={{ td: ['text-xl'], th: ['text-xl'] }}
-                selectionMode="single"
+                classNames={{
+                    td: ['text-xl', 'first:hidden'],
+                    th: ['text-xl', 'first:hidden'],
+                }}
+                className='mb-4'
+                selectionMode="multiple"
+                selectedKeys={selectedTeams}
                 onSelectionChange={handleTeamSelection}
             >
                 <TableHeader columns={columns}>
@@ -94,9 +143,15 @@ export default function Dashboard() {
                 </TableBody>
             </Table>
             {selectedTeamGamesData ? (
-                <GamesList data={selectedTeamGamesData} />
+                <>
+                    {confrontationResult ? (
+                        <p>{confrontationResult}</p>
+                    ) : (null)
+                    }
+                    <GamesList data={selectedTeamGamesData} />
+                </>
             ) : null}
 
-        </div>
+        </div >
     );
 }

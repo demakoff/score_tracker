@@ -20,8 +20,8 @@ query GetActiveGame{
 }    
 `;
 export const GetGamesQuery = gql`
-query GetGames($teamId: Int, $finished: Boolean){
-    games(teamId: $teamId, finished: $finished) {
+query GetGames($teamId: Int, $teamTwoId: Int, $finished: Boolean){
+    games(teamId: $teamId, teamTwoId: $teamTwoId, finished: $finished) {
         id
         teamOne {
           name
@@ -31,6 +31,9 @@ query GetGames($teamId: Int, $finished: Boolean){
         }
         teamOneScore
         teamTwoScore
+        winner {
+            name
+        }
     }
 }    
 `;

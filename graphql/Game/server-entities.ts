@@ -29,11 +29,24 @@ builder.queryField('games', (t) =>
         nullable: true,
         args: {
             teamId: t.arg.int(),
+            teamTwoId: t.arg.int(),
             finished: t.arg.boolean(),
         },
         resolve: (query, _parent, args) => {
-            const where: any = args.teamId ?
-                { OR: [{ teamOne: args.teamId }, { teamTwo: args.teamId }] } : {};
+            let where: any = {};
+
+            if (args.teamId) {
+                if (args.teamTwoId) {
+                    where = {
+                        OR: [
+                            { AND: [{ teamOne: args.teamId }, { teamTwo: args.teamTwoId }] },
+                            { AND: [{ teamOne: args.teamTwoId }, { teamTwo: args.teamId }] }
+                        ]
+                    };
+                } else {
+                    where = { OR: [{ teamOne: args.teamId }, { teamTwo: args.teamId }] };
+                }
+            }
 
             if (args.finished) {
                 where.NOT = { winner: null };
