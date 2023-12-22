@@ -47,7 +47,7 @@ export default function NewTeam() {
                 color="primary"
                 className="my-2 text-3xl w-full h-16"
                 onClick={() => createTeam({ variables: { name } })}
-                isDisabled={loading}
+                isDisabled={!name || loading}
             >
                 {loading ? 'Creating' : 'Create'} new team
             </Button>

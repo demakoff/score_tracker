@@ -6,7 +6,7 @@
 2. Clone repo with default `master` branch.
 3. Make sure you have a Docker installed and is running.
 4. Open project root folder with your terminal.
-5. Run `docker compose build` in the terminal (should finish in about 1-2 mins).
+5. Run `docker compose build` in the terminal (may take about 2-4 mins).
 6. Make sure that localhost ports `3000` (used by app) and `5432` (used by database) and free. Otherwise you will see `EADDRINUSE` error
 7. Run `docker compose up -d` to run container is detached (background) mode
 8. Open app with `http://localhost:3000`.
@@ -44,7 +44,7 @@
 - **[DX, CI/CD Performance]** Leave only prod deps in Docker image (currently all deps included).
 - **[Security]** Setup other (not superuser) users for DB.
 - **[Security]** Improve db config with user, db name etc (currently all fields are default).
-- **[Security]** Implement proper input validation.
+- **[Security]** Implement proper input validation (currently it's very basic).
 - **[Observability, Security]** Implement proper error handling.
 - **[DX]** Refine project files structure (currently it's not much organized).
 - **[DX]** Split components to smaller (currently some take 100-200 lines of code).
