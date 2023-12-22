@@ -27,7 +27,7 @@ builder.queryField('teamStats', (t) =>
         resolve: async () => {
             const teams = await prisma.team.findMany();
 
-            return teams.map(async (team) => {
+            const teamStats = teams.map(async (team) => {
                 const games = await prisma.game.findMany({
                     where: { OR: [{ teamOne: team.id }, { teamTwo: team.id }] }
                 });
@@ -66,6 +66,9 @@ builder.queryField('teamStats', (t) =>
                     goalsDiff,
                 };
             });
+
+            const syncTeamStats = await Promise.all(teamStats);
+            return syncTeamStats.sort((a, b) => a.winRatio < b.winRatio ? 1 : -1);
         }
     }),
 );
