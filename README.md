@@ -23,7 +23,23 @@
 6. Same team cannot be selected in both team fields on game creation.
 
 
-## ToDo next:
+## Tech stack
+- "React" as a components library
+- "TailwindCSS" for styling
+- "NextUI" React UI components library
+- "Next.js" as a Node.js backend framework
+- "Typescript" for types
+- "Jest" for testing
+- "GraphQL" - data transport
+- "GraphQL-Yoga" - GraphQL server
+- "Apollo-Client" - GraphQL client
+- "Pothos" - Typescript schema builder
+- PostgreSQL - relational database management system
+- "Prisma" - ORM for PostgreSQL
+- Docker - containerization tool
+
+
+## ToDo next
 - **[Security]** Currently docker operates as root user, which is security risk.
 - **[DX, CI/CD Performance]** Leave only prod deps in Docker image (currently all deps included).
 - **[Security]** Setup other (not superuser) users for DB.
@@ -36,26 +52,66 @@
 - **[UX]** Adapt UX to bigger screens (currently it focused on mobile view).
 - **[DX, CI/CD Performance]** Add `pre-push` git hook with tests and code style check runs to validate code on the earliest stage.
 
+
 ## Pages
 
 #### Game (Home)
 
-![No active games, there are some already played](https://prnt.sc/-eWsg6ZZ_Vov)
+No active games, there are some already played:
 
-![There is an active game, with some already played](https://prnt.sc/XeBvUIdKfJDH)
+<img height="400" alt="image" src="https://github.com/demakoff/score_tracker/assets/5207710/59155104-7de7-4086-9e35-6626e99f0c87">
 
-![Game finished](https://prnt.sc/xO38nuWfRCh1)
+
+There is an active game, with some already played:
+
+<img height="400" alt="image" src="https://github.com/demakoff/score_tracker/assets/5207710/ff668f71-78e3-4cfb-809c-0d612dd30fbe">
+
+
+Game finished:
+
+<img height="400" alt="image" src="https://github.com/demakoff/score_tracker/assets/5207710/f80f329b-d65f-4d49-8de0-479ab7a906c0">
+
+
 
 #### New Game
 
-![New game form](https://prnt.sc/npNmXTLWvqLE)
+New game form:
 
-![New game team selection](https://prnt.sc/Hsh-SpXsGRqb)
+<img height="400" alt="image" src="https://github.com/demakoff/score_tracker/assets/5207710/8027f638-68b7-4352-a45c-e2c2b3e4f739">
 
-![New previously played game](https://prnt.sc/Y9a9Vx1jNm3E)
+
+New game team selection:
+
+<img height="400" alt="image" src="https://github.com/demakoff/score_tracker/assets/5207710/572291dd-ea67-45f1-ae36-3d646262535c">
+
+
+New previously played game: 
+
+<img height="400" alt="image" src="https://github.com/demakoff/score_tracker/assets/5207710/cd3e43d5-ea74-4c41-8a79-314547c57fb8">
+
 
 
 #### New Team
 
-![New team form](https://prnt.sc/tjme7dPRjqqn)
+New team form:
+
+<img height="400" alt="image" src="https://github.com/demakoff/score_tracker/assets/5207710/d50c1e6c-42cd-48b8-b4a8-1d55b9148bc0">
+
+
+
+#### Dashboard
+
+Teams table:
+
+<img height="400" alt="image" src="https://github.com/demakoff/score_tracker/assets/5207710/179d6c90-8706-4540-968c-ac4543682299">
+
+
+Selected team finished games:
+
+<img height="400" alt="image" src="https://github.com/demakoff/score_tracker/assets/5207710/bafdc488-58bc-4576-b5ae-fa781daea502">
+
+
+Two teams' confrontational statistics:
+
+<img height="400" alt="image" src="https://github.com/demakoff/score_tracker/assets/5207710/eb9def1e-1763-43d3-9813-8dd03f8d9b21">
 
