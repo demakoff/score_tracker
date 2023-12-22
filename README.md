@@ -1,43 +1,61 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
 
-First, run the development server:
+## How to run this project
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+1. Make sure you have git installed.
+2. Clone repo with default `master` branch.
+3. Make sure you have a Docker installed and is running.
+4. Open project root folder with your terminal.
+5. Run `docker compose build` in the terminal (should finish in about 1-2 mins).
+6. Make sure that localhost ports `3000` (used by app) and `5432` (used by database) and free. Otherwise you will see `EADDRINUSE` error
+7. Run `docker compose up -d` to run container is detached (background) mode
+8. Open app with `http://localhost:3000`.
+9. To provide the best UX, it's recommended to open the site in mobile view (e.g. via Chrome Devtool).
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Assumptions
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+1. Game is automatically get finished when one of the teams scores 10 goals.
+2. Game cannot be finished unless one of the teams scores 10 goals.
+3. Previously played game cannot be created if one of the team has less than 10 goals.
+4. Previously played game cannot be created if both teams scores 10 goals.
+5. In the current implementation Team equals Player.
+6. Same team cannot be selected in both team fields on game creation.
 
-## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+## ToDo next:
+- **[Security]** Currently docker operates as root user, which is security risk.
+- **[DX, CI/CD Performance]** Leave only prod deps in Docker image (currently all deps included).
+- **[Security]** Setup other (not superuser) users for DB.
+- **[Security]** Improve db config with user, db name etc (currently all fields are default).
+- **[Security]** Implement proper input validation.
+- **[Observability, Security]** Implement proper error handling.
+- **[DX]** Refine project files structure (currently it's not much organized).
+- **[DX]** Split components to smaller (currently some take 100-200 lines of code).
+- **[Stability]** Add more tests (currently we have only a few of integrational, just to showcase)
+- **[UX]** Adapt UX to bigger screens (currently it focused on mobile view).
+- **[DX, CI/CD Performance]** Add `pre-push` git hook with tests and code style check runs to validate code on the earliest stage.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Pages
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+#### Game (Home)
 
-## Deploy on Vercel
+![No active games, there are some already played](https://prnt.sc/-eWsg6ZZ_Vov)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+![There is an active game, with some already played](https://prnt.sc/XeBvUIdKfJDH)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+![Game finished](https://prnt.sc/xO38nuWfRCh1)
 
-Improvements:
-- Currently docker operates as root user, which is security risk
-- Leave only prod deps in Docker image
-- Setup other (not superuser) users for DB
-- Improve db config with user, db name etc
-- 
+#### New Game
+
+![New game form](https://prnt.sc/npNmXTLWvqLE)
+
+![New game team selection](https://prnt.sc/Hsh-SpXsGRqb)
+
+![New previously played game](https://prnt.sc/Y9a9Vx1jNm3E)
+
+
+#### New Team
+
+![New team form](https://prnt.sc/tjme7dPRjqqn)
+
